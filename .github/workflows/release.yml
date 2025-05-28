@@ -1,4 +1,4 @@
-name: tests
+name: release
 
 on:
   push:
@@ -25,6 +25,7 @@ jobs:
         id: install-r
         with:
           bioc-version: release
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-pakcages: scRepertoire
+      - name: Install scRepertoire from Bioconductor
+        run: |
+          Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager")'
+          Rscript -e 'BiocManager::install("scRepertoire", ask=FALSE, update=FALSE)'
