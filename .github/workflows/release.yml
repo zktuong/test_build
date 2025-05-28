@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  release:
+    timeout-minutes: 720
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      max-parallel: 10
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    name: Build and test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup R and Bioconductor
+        uses: grimbough/bioc-actions/setup-bioc@v1
+        id: install-r
+        with:
+          bioc-version: release
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-pakcages: scRepertoire
